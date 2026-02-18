@@ -55,7 +55,7 @@ make lint
 
 Pipeline automatizado com GitHub Actions:
 - Linting (Black + Flake8)
-- Testes (89%
+- Testes
 - Build & Deploy Simulation
 
 **Trigger:** Pull Requests e merges na `main`
