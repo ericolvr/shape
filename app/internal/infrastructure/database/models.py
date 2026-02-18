@@ -26,4 +26,3 @@ class UserModel(Base):
         default=datetime.utcnow,
         onupdate=datetime.utcnow,
     )
-

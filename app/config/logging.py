@@ -9,20 +9,18 @@ settings = get_settings()
 
 def setup_logging() -> logging.Logger:
     """Configure and return the application logger"""
-    
+
     log_level = getattr(logging, settings.log_level.upper(), logging.INFO)
-    
+
     logging.basicConfig(
         level=log_level,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.StreamHandler(sys.stdout)
-        ]
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        handlers=[logging.StreamHandler(sys.stdout)],
     )
-    
+
     logger = logging.getLogger("shape")
     logger.setLevel(log_level)
-    
+
     return logger
 
 

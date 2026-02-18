@@ -31,9 +31,34 @@ make run
 ```bash
 # Rodar testes
 make test
+
+# Testes com cobertura
+make test-cov
 ```
 
+**Cobertura atual: 89%** ✅
 
+## Code Quality
+
+```bash
+# Formatar código
+make format
+
+# Verificar formatação
+make format-check
+
+# Linting
+make lint
+```
+
+## CI/CD
+
+Pipeline automatizado com GitHub Actions:
+- ✅ Linting (Black + Flake8)
+- ✅ Testes (89% cobertura)
+- ✅ Build & Deploy Simulation
+
+**Trigger:** Pull Requests e merges na `main`
 
 ## API Docs
 - **Swagger UI**: http://localhost:8000/docs

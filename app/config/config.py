@@ -4,9 +4,9 @@ from functools import lru_cache
 
 
 class Settings(BaseSettings):
-    """ app settings """
-    
-    db_url: str = "postgresql+psycopg2://postgres:postgres@localhost:5432/postgres" 
+    """app settings"""
+
+    db_url: str = "postgresql+psycopg2://postgres:postgres@localhost:5432/postgres"
 
     app_name: str = "Shape API"
     app_version: str = "1.0.0"
@@ -20,7 +20,7 @@ class Settings(BaseSettings):
 
     log_level: str = "INFO"
 
-    cors_origins: list[str] = ["http://localhost:3000",  "http://localhost:8000"]
+    cors_origins: list[str] = ["http://localhost:3000", "http://localhost:8000"]
 
     class Config:
         case_sensitive = False

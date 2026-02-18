@@ -16,23 +16,22 @@ settings = get_settings()
 
 def setup_tracing():
     """Configure tracing with OTLP exporter (Jaeger)"""
-    
-    resource = Resource.create({
-        "service.name": settings.app_name,
-        "service.version": settings.app_version,
-    })
-    
-    provider = TracerProvider(resource=resource)
-    
-    otlp_exporter = OTLPSpanExporter(
-        endpoint="http://localhost:4317",
-        insecure=True
+
+    resource = Resource.create(
+        {
+            "service.name": settings.app_name,
+            "service.version": settings.app_version,
+        }
     )
+
+    provider = TracerProvider(resource=resource)
+
+    otlp_exporter = OTLPSpanExporter(endpoint="http://localhost:4317", insecure=True)
     processor = BatchSpanProcessor(otlp_exporter)
     provider.add_span_processor(processor)
-    
+
     trace.set_tracer_provider(provider)
-    
+
     logger.info("Tracing configured with OTLP exporter (Jaeger)")
 
 

@@ -9,7 +9,7 @@ from app.internal.core.domain.exceptions import ValidationError
 @dataclass
 class User:
     """User Entity - Representa um user no dominio"""
-    
+
     name: str
     email: str
     id: Optional[int] = None
@@ -22,11 +22,11 @@ class User:
             raise ValidationError("Email is required")
         if "@" not in self.email:
             raise ValidationError("Invalid email format")
-    
-    
+
+
 class UserRepository(ABC):
     """Interface para o repositório de usuarios"""
-    
+
     @abstractmethod
     def create(self, user: User) -> User:
         """Adiciona um usuario ao repositório"""
@@ -41,7 +41,7 @@ class UserRepository(ABC):
     def get_by_id(self, id: int) -> Optional[User]:
         """Busca um usuario pelo id"""
         pass
-    
+
     @abstractmethod
     def update(self, user: User) -> User:
         """Atualiza um usuario no repositório"""

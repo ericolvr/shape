@@ -1,7 +1,6 @@
 """user schemas"""
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
-from datetime import datetime
 
 
 class UserBase(BaseModel):
@@ -20,6 +19,6 @@ class UserUpdate(BaseModel):
 
 class UserResponse(UserBase):
     id: int
-    
+
     class Config:
         from_attributes = True

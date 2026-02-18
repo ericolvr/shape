@@ -39,6 +39,11 @@ help:
 	@echo "  $(COLOR_GREEN)test$(COLOR_RESET)			- Run unit tests"
 	@echo "  $(COLOR_GREEN)test-cov$(COLOR_RESET)		- Run tests with coverage report"
 	@echo ""
+	@echo "  $(COLOR_BLUE)Code Quality:$(COLOR_RESET)"
+	@echo "  $(COLOR_GREEN)lint$(COLOR_RESET)			- Run linting (flake8)"
+	@echo "  $(COLOR_GREEN)format$(COLOR_RESET)		- Format code with black"
+	@echo "  $(COLOR_GREEN)format-check$(COLOR_RESET)	- Check code formatting"
+	@echo ""
 
 
 install:
@@ -162,3 +167,18 @@ migrate-rollback:
 	@echo "$(COLOR_YELLOW)Rolling back last migration...$(COLOR_RESET)"
 	alembic downgrade -1
 	@echo "$(COLOR_GREEN)✅ Migration rolled back!$(COLOR_RESET)"
+
+lint:
+	@echo "$(COLOR_YELLOW)Running linting checks...$(COLOR_RESET)"
+	flake8 app/ tests/
+	@echo "$(COLOR_GREEN)✅ Linting passed!$(COLOR_RESET)"
+
+format:
+	@echo "$(COLOR_YELLOW)Formatting code with black...$(COLOR_RESET)"
+	black app/ tests/
+	@echo "$(COLOR_GREEN)✅ Code formatted!$(COLOR_RESET)"
+
+format-check:
+	@echo "$(COLOR_YELLOW)Checking code formatting...$(COLOR_RESET)"
+	black --check app/ tests/
+	@echo "$(COLOR_GREEN)✅ Code formatting is correct!$(COLOR_RESET)"
