@@ -4,14 +4,13 @@ from app.internal.core.domain.user import User, UserRepository
 
 
 class UserService:
-    
     def __init__(self, user_repo: UserRepository):
         self.user_repo = user_repo
-    
+
     def create(self, user: User) -> User:
         user.validate()
         return self.user_repo.create(user)
-    
+
     def list(self) -> List[User]:
         return self.user_repo.list()
 

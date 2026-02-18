@@ -25,9 +25,9 @@ async def lifespan(_app: FastAPI):
     except Exception as e:
         logger.error(f"Application startup failed: {str(e)}")
         raise
-    
+
     yield
-    
+
     logger.info("Application shutdown")
 
 
@@ -58,4 +58,3 @@ def health():
         "version": settings.app_version,
         "environment": settings.environment,
     }
-
