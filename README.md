@@ -54,9 +54,9 @@ make lint
 ## CI/CD
 
 Pipeline automatizado com GitHub Actions:
-- ✅ Linting (Black + Flake8)
-- ✅ Testes (89% cobertura)
-- ✅ Build & Deploy Simulation
+- Linting (Black + Flake8)
+- Testes (89%
+- Build & Deploy Simulation
 
 **Trigger:** Pull Requests e merges na `main`
 
