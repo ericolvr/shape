@@ -156,3 +156,21 @@ logs/
 tmp/
 temp/
 *.tmp
+
+# Alembic
+alembic/versions/__pycache__/
+
+# Docker volumes
+postgres_data_shape/
+
+# Environment files (keep only .env.example)
+.env.*
+!.env.example
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
