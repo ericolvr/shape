@@ -26,9 +26,21 @@ make run
 ```
 
 
-## Testes
+## Tests
 
 ```bash
 # Rodar testes
 make test
 ```
+
+
+## Tracing
+
+```bash
+# Iniciar o Jaeger
+make jaeger-start
+```
+
+## Tracing Endpoint
+
+http://localhost:16686
