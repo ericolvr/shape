@@ -24,6 +24,17 @@ help:
 	@echo "  $(COLOR_GREEN)db-stop$(COLOR_RESET)		- Stop database container"
 	@echo "  $(COLOR_GREEN)db-clean$(COLOR_RESET)		- Clean database data"
 	@echo ""
+	@echo "  $(COLOR_BLUE)Tracing (Jaeger):$(COLOR_RESET)"
+	@echo "  $(COLOR_GREEN)tracing-start$(COLOR_RESET)	- Start Jaeger container"
+	@echo "  $(COLOR_GREEN)tracing-stop$(COLOR_RESET)	- Stop Jaeger container"
+	@echo "  $(COLOR_GREEN)tracing-ui$(COLOR_RESET)		- Open Jaeger UI in browser"
+	@echo ""
+	@echo "  $(COLOR_BLUE)Migrations (Alembic):$(COLOR_RESET)"
+	@echo "  $(COLOR_GREEN)migrate$(COLOR_RESET)		- Run pending migrations"
+	@echo "  $(COLOR_GREEN)migrate-create$(COLOR_RESET)	- Create new migration"
+	@echo "  $(COLOR_GREEN)migrate-history$(COLOR_RESET)	- Show migration history"
+	@echo "  $(COLOR_GREEN)migrate-rollback$(COLOR_RESET)	- Rollback last migration"
+	@echo ""
 	@echo "  $(COLOR_BLUE)Testing:$(COLOR_RESET)"
 	@echo "  $(COLOR_GREEN)test$(COLOR_RESET)			- Run unit tests"
 	@echo "  $(COLOR_GREEN)test-cov$(COLOR_RESET)		- Run tests with coverage report"
@@ -116,3 +127,38 @@ db-clean:
 	docker compose down postgres
 	docker volume rm $(DB_VOLUME_NAME) 2>/dev/null || true
 	@echo "$(COLOR_GREEN)✅ Database data cleaned!$(COLOR_RESET)"
+
+tracing-start:
+	@echo "$(COLOR_YELLOW)Starting Jaeger container...$(COLOR_RESET)"
+	docker compose up jaeger -d
+	@echo "$(COLOR_GREEN)✅ Jaeger started!$(COLOR_RESET)"
+	@echo "$(COLOR_BLUE)Jaeger UI: http://localhost:16686$(COLOR_RESET)"
+
+tracing-stop:
+	@echo "$(COLOR_YELLOW)Stopping Jaeger container...$(COLOR_RESET)"
+	docker compose down jaeger
+	@echo "$(COLOR_GREEN)✅ Jaeger stopped!$(COLOR_RESET)"
+
+tracing-ui:
+	@echo "$(COLOR_BLUE)Opening Jaeger UI in browser...$(COLOR_RESET)"
+	open http://localhost:16686
+
+migrate:
+	@echo "$(COLOR_YELLOW)Running database migrations...$(COLOR_RESET)"
+	alembic upgrade head
+	@echo "$(COLOR_GREEN)✅ Migrations applied successfully!$(COLOR_RESET)"
+
+migrate-create:
+	@echo "$(COLOR_YELLOW)Creating new migration...$(COLOR_RESET)"
+	@read -p "Enter migration message: " msg; \
+	alembic revision --autogenerate -m "$$msg"
+	@echo "$(COLOR_GREEN)✅ Migration created!$(COLOR_RESET)"
+
+migrate-history:
+	@echo "$(COLOR_BLUE)Migration history:$(COLOR_RESET)"
+	alembic history --verbose
+
+migrate-rollback:
+	@echo "$(COLOR_YELLOW)Rolling back last migration...$(COLOR_RESET)"
+	alembic downgrade -1
+	@echo "$(COLOR_GREEN)✅ Migration rolled back!$(COLOR_RESET)"
