@@ -1,4 +1,5 @@
 """ app entrypoint """
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -8,9 +9,17 @@ from app.internal.infrastructure.database.connection import populate
 
 settings = get_settings()
 
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    populate()
+    yield
+
+
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
+    lifespan=lifespan,
 )
 
 app.add_middleware(
@@ -24,15 +33,8 @@ app.add_middleware(
 app.include_router(user_router)
 
 
-@app.on_event("startup")
-def on_startup():
-    """ populate database on startup"""
-    populate()
-
-
 @app.get("/", tags=["health"])
 def health():
-    """ health check """
     return {
         "status": "ok",
         "app": settings.app_name,

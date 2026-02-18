@@ -3,6 +3,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Optional, List
 
+from app.internal.core.domain.exceptions import ValidationError
+
 
 @dataclass
 class User:
@@ -15,11 +17,11 @@ class User:
     def validate(self) -> None:
         """Valida os campos do usuario"""
         if not self.name:
-            raise ValueError("Name is required")
+            raise ValidationError("Name is required")
         if not self.email:
-            raise ValueError("Email is required")
+            raise ValidationError("Email is required")
         if "@" not in self.email:
-            raise ValueError("Invalid email format")
+            raise ValidationError("Invalid email format")
     
     
 class UserRepository(ABC):

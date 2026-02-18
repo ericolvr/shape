@@ -1,4 +1,4 @@
-""" connectoin and session management """
+""" connection and sesssion management """
 from typing import Generator
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
@@ -31,5 +31,11 @@ def get_db() -> Generator[Session, None, None]:
 
 
 def populate():
-    from app.internal.infrastructure.database.models import Base
-    Base.metadata.create_all(bind=engine)
+    try:
+        from app.internal.infrastructure.database.models import Base
+        Base.metadata.create_all(bind=engine)
+        print("Database tables created successfully")
+    except Exception as e:
+        print(f"Failed to create database tables: {e}")
+        print("Please check your database connection settings")
+        raise
