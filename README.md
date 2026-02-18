@@ -24,3 +24,11 @@ make db-start
 # Rodar localmente
 make run
 ```
+
+
+## Testes
+
+```bash
+# Rodar testes
+make test
+```
