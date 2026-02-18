@@ -24,12 +24,32 @@ help:
 	@echo "  $(COLOR_GREEN)db-stop$(COLOR_RESET)		- Stop database container"
 	@echo "  $(COLOR_GREEN)db-clean$(COLOR_RESET)		- Clean database data"
 	@echo ""
+	@echo "  $(COLOR_BLUE)Testing:$(COLOR_RESET)"
+	@echo "  $(COLOR_GREEN)test$(COLOR_RESET)			- Run unit tests"
+	@echo "  $(COLOR_GREEN)test-cov$(COLOR_RESET)		- Run tests with coverage report"
+	@echo ""
 
 
 install:
 	@echo "$(COLOR_YELLOW)Installing dependencies...$(COLOR_RESET)"
 	pip install -r requirements.txt
 	@echo "$(COLOR_GREEN)Dependencies installed successfully!$(COLOR_RESET)"
+
+install-dev:
+	@echo "$(COLOR_YELLOW)Installing dev dependencies...$(COLOR_RESET)"
+	pip install -r requirements.txt
+	pip install -r requirements-dev.txt
+	@echo "$(COLOR_GREEN)Dev dependencies installed successfully!$(COLOR_RESET)"
+
+test:
+	@echo "$(COLOR_YELLOW)Running unit tests...$(COLOR_RESET)"
+	pytest tests/unit/ -v
+	@echo "$(COLOR_GREEN)✅ Unit tests passed!$(COLOR_RESET)"
+
+test-cov:
+	@echo "$(COLOR_YELLOW)Running tests with coverage...$(COLOR_RESET)"
+	pytest tests/unit/ --cov=app --cov-report=html --cov-report=term
+	@echo "$(COLOR_GREEN)✅ Coverage report generated in htmlcov/$(COLOR_RESET)"
 
 env:
 	@echo "$(COLOR_YELLOW)Setting up environment...$(COLOR_RESET)"
