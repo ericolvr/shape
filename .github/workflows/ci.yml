@@ -119,17 +119,17 @@ jobs:
         run: |
           timeout 10s uvicorn app.main:app --host 0.0.0.0 --port 8000 || code=$?
           if [ $code -eq 124 ]; then
-            echo "✅ Application started successfully"
+            echo "Application started successfully"
             exit 0
           else
-            echo "❌ Application failed to start"
+            echo "Application failed to start"
             exit 1
           fi
       
       - name: Simulate deployment
         run: |
-          echo "🚀 Simulating deployment to staging..."
-          echo "✅ Build successful"
-          echo "✅ Tests passed"
-          echo "✅ Ready for deployment"
-          echo "📦 Artifact: shape-api:${{ github.sha }}"
+          echo "Simulating deployment to staging..."
+          echo "Build successful"
+          echo "Tests passed"
+          echo "Ready for deployment"
+          echo "Artifact: shape-api:${{ github.sha }}"
