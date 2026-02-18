@@ -4,6 +4,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 
 from app.config.config import get_settings
+from app.config.logging import get_logger
+
+logger = get_logger("infrastructure.database")
 
 settings = get_settings()
 
@@ -31,11 +34,11 @@ def get_db() -> Generator[Session, None, None]:
 
 
 def populate():
+    logger.info("Initializing database tables")
     try:
         from app.internal.infrastructure.database.models import Base
         Base.metadata.create_all(bind=engine)
-        print("Database tables created successfully")
+        logger.info("Database tables created successfully")
     except Exception as e:
-        print(f"Failed to create database tables: {e}")
-        print("Please check your database connection settings")
+        logger.error(f"Failed to create database tables: {str(e)}")
         raise

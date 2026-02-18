@@ -6,6 +6,9 @@ from sqlalchemy.exc import IntegrityError
 from app.internal.core.domain.user import User, UserRepository
 from app.internal.core.domain.exceptions import DuplicateEmailError, UserNotFoundError
 from app.internal.infrastructure.database.models import UserModel
+from app.config.logging import get_logger
+
+logger = get_logger("infrastructure.user_repository")
 
 
 class UserRepoImpl(UserRepository):
@@ -25,6 +28,7 @@ class UserRepoImpl(UserRepository):
             self.db.refresh(db_user)
         except IntegrityError as e:
             self.db.rollback()
+            logger.error(f"Database integrity error on user creation: email={user.email}, error={str(e)}")
             if "unique constraint" in str(e).lower() or "duplicate key" in str(e).lower():
                 raise DuplicateEmailError(f"Email '{user.email}' already exists")
             raise
@@ -46,6 +50,7 @@ class UserRepoImpl(UserRepository):
             UserModel.id == user.id
         ).with_for_update().first()
         if not db_user:
+            logger.error(f"User not found for update: id={user.id}")
             raise UserNotFoundError(f"User with id {user.id} not found")
         
         db_user.name = user.name
@@ -56,6 +61,7 @@ class UserRepoImpl(UserRepository):
             self.db.refresh(db_user)
         except IntegrityError as e:
             self.db.rollback()
+            logger.error(f"Database integrity error on user update: id={user.id}, error={str(e)}")
             if "unique constraint" in str(e).lower() or "duplicate key" in str(e).lower():
                 raise DuplicateEmailError(f"Email '{user.email}' already exists")
             raise
@@ -72,6 +78,7 @@ class UserRepoImpl(UserRepository):
             self.db.commit()
         except Exception as e:
             self.db.rollback()
+            logger.error(f"Error deleting user from database: id={user_id}, error={str(e)}")
             raise
         
         return True

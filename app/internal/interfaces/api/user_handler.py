@@ -8,6 +8,9 @@ from app.internal.core.domain.exceptions import DuplicateEmailError, UserNotFoun
 from app.internal.interfaces.dto.user import UserRequest, UserUpdate, UserResponse
 from app.internal.interfaces.api.dependencies import get_user_service
 from app.internal.infrastructure.tasks.email_tasks import send_welcome_email
+from app.config.logging import get_logger
+
+logger = get_logger("api.user_handler")
 
 router = APIRouter(
     prefix="/users",
@@ -25,7 +28,6 @@ def create(
         user = User(name=data.name, email=data.email)
         created_user = service.create(user)
         
-        # background task para enviar email
         background_tasks.add_task(
             send_welcome_email, 
             created_user.email, 
@@ -35,11 +37,13 @@ def create(
         return created_user
     
     except DuplicateEmailError as e:
+        logger.error(f"POST /users failed - duplicate email: {data.email}")
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, 
             detail=str(e)
         )
     except ValidationError as e:
+        logger.error(f"POST /users failed - validation error: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, 
             detail=str(e)
@@ -48,6 +52,7 @@ def create(
 
 @router.get("/", response_model=List[UserResponse])
 def list_all(service: UserService = Depends(get_user_service)):
+
     return service.list()
 
 
@@ -58,6 +63,7 @@ def get_by_id(
 ):
     user = service.get_by_id(user_id)
     if not user:
+        logger.error(f"GET /users/{user_id} failed - not found")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"User with id {user_id} not found"
@@ -74,6 +80,7 @@ def update(
     try:
         existing_user = service.get_by_id(user_id)
         if not existing_user:
+            logger.error(f"PUT /users/{user_id} failed - not found")
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"User with id {user_id} not found"
@@ -88,16 +95,19 @@ def update(
         return updated_user
 
     except DuplicateEmailError as e:
+        logger.error(f"PUT /users/{user_id} failed - duplicate email: {data.email}")
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, 
             detail=str(e)
         )
     except UserNotFoundError as e:
+        logger.error(f"PUT /users/{user_id} failed - not found")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, 
             detail=str(e)
         )
     except ValidationError as e:
+        logger.error(f"PUT /users/{user_id} failed - validation error: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, 
             detail=str(e)
@@ -111,6 +121,7 @@ def delete(
 ):
     success = service.delete(user_id)
     if not success:
+        logger.error(f"DELETE /users/{user_id} failed - not found")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"User with id {user_id} not found"
