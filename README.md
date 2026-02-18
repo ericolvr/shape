@@ -41,6 +41,6 @@ make test
 make jaeger-start
 ```
 
-## Tracing Endpoint
+## Jaeger Endpoint
 
 http://localhost:16686
