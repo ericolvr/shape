@@ -31,14 +31,3 @@ def get_db() -> Generator[Session, None, None]:
         yield db
     finally:
         db.close()
-
-
-def populate():
-    logger.info("Initializing database tables")
-    try:
-        from app.internal.infrastructure.database.models import Base
-        Base.metadata.create_all(bind=engine)
-        logger.info("Database tables created successfully")
-    except Exception as e:
-        logger.error(f"Failed to create database tables: {str(e)}")
-        raise
