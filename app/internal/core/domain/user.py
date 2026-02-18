@@ -10,9 +10,9 @@ from app.internal.core.domain.exceptions import ValidationError
 class User:
     """User Entity - Representa um user no dominio"""
     
-    id: Optional[int] = None
     name: str
     email: str
+    id: Optional[int] = None
 
     def validate(self) -> None:
         """Valida os campos do usuario"""
